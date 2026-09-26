@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class RaceController : MonoBehaviour
 {
@@ -10,10 +12,16 @@ public class RaceController : MonoBehaviour
     public int timer = 3;
     public GameObject endPanel;
 
+    public TMP_Text startText;
+    AudioSource audioSource;
+    public AudioClip countClip;
+    public AudioClip startClip;
+
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         endPanel.SetActive(false);
-        //Debug.Log("-----------------------------");
+        startText.gameObject.SetActive(false);
         InvokeRepeating("CountDown", 3, 1);
         GameObject[] cars = GameObject.FindGameObjectsWithTag("Car");
         carsController = new CheckPointController[cars.Length];
@@ -42,16 +50,30 @@ public class RaceController : MonoBehaviour
 
     void CountDown()
     {
+        startText.gameObject.SetActive(true);
         if (timer != 0)
         {
-            Debug.Log("Rozpoczêcie wyœcigu za: " + timer);
+            startText.text = timer.ToString();
+            audioSource.PlayOneShot(countClip);
             timer--;
         }
         else
         {
-            Debug.Log("Start!!!");
+            startText.text = "START!!!";
+            audioSource.PlayOneShot(startClip);
             racing = true;
             CancelInvoke("CountDown");
+            Invoke("HideStartText", 1);
         }
+    }
+
+    void HideStartText()
+    {
+        startText.gameObject.SetActive(false);
+    }
+
+    public void LoadScene(int index)
+    {
+        SceneManager.LoadScene(index);
     }
 }

@@ -14,7 +14,7 @@ public class CarApperance : MonoBehaviour
     {
         nameText.text = playerName;
         carRenderer.material.color = carColor;
-        nameText.faceColor = carColor;  // TODO: renderer
+        nameText.color = carColor;  // TODO: renderer
     }
 
     // Update is called once per frame
