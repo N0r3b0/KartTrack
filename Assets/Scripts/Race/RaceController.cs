@@ -17,12 +17,31 @@ public class RaceController : MonoBehaviour
     public AudioClip countClip;
     public AudioClip startClip;
 
+    public GameObject carPrefab;
+    public Transform[] spawnPos;
+    public int playerCount;
+
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
         endPanel.SetActive(false);
         startText.gameObject.SetActive(false);
         InvokeRepeating("CountDown", 3, 1);
+
+        // spawnowanie samochodów
+        for (int i = 0; i < playerCount; i++)
+        {
+            GameObject car = Instantiate(carPrefab);
+            car.transform.position = spawnPos[i].position;
+            car.transform.rotation = spawnPos[i].rotation;
+            car.GetComponent<CarApperance>().playerNumber = i;
+            if (i == 0) // spawnujemy gracza
+            {
+                car.GetComponent<PlayerController>().enabled = true;
+                FindObjectOfType<CameraController>().SetCameraProperties(car);
+            }
+        }
+
         GameObject[] cars = GameObject.FindGameObjectsWithTag("Car");
         carsController = new CheckPointController[cars.Length];
         for (int i = 0; i < cars.Length; i++)
