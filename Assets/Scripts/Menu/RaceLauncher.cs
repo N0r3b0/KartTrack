@@ -56,7 +56,7 @@ public class RaceLauncher : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         networkText.text = "Joined Room with " + PhotonNetwork.CurrentRoom.PlayerCount + "players.\n";
-        // PhotonNetwork.LoadLevel("TestTrack");
+        PhotonNetwork.LoadLevel("TestTrack");
     }
 
     public void ConnectNetwork()
