@@ -11,6 +11,26 @@ public class OnlinePlayer : MonoBehaviourPunCallbacks
     {
         if (photonView.IsMine)
             LocalPlayerInstance = gameObject;
+        else
+        {
+            string playerName = null;
+            Color playerColor = Color.white;
+
+            if (photonView.InstantiationData != null)
+            {
+                playerName = (string) photonView.InstantiationData[0]; //string
+                playerColor = ColorCar.IntToColor(
+                    (int) photonView.InstantiationData[1],
+                    (int) photonView.InstantiationData[2],
+                    (int) photonView.InstantiationData[3]
+                );
+            }
+
+            if (playerName != null)
+            {
+                GetComponent<CarApperance>().SetNameAndColor(playerName, playerColor); //ustawiamy kolor dla gracza nielokalnego
+            }
+        }
     }
 
     // Update is called once per frame

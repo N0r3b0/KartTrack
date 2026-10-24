@@ -49,9 +49,16 @@ public class RaceController : MonoBehaviourPunCallbacks
             Vector3 startPos = spawnPos[PhotonNetwork.CurrentRoom.PlayerCount-1].position;
             Quaternion startRot = spawnPos[PhotonNetwork.CurrentRoom.PlayerCount-1].rotation;
 
+            object[] instanceData = new object[4];
+            instanceData[0] = PlayerPrefs.GetString("PlayerName");
+            instanceData[1] = PlayerPrefs.GetInt("Red");
+            instanceData[2] = PlayerPrefs.GetInt("Green");
+            instanceData[3] = PlayerPrefs.GetInt("Blue");
+
             if (OnlinePlayer.LocalPlayerInstance == null)
             {
-                playerCar = PhotonNetwork.Instantiate(carPrefab.name, startPos, startRot);
+                playerCar = PhotonNetwork.Instantiate(carPrefab.name, startPos, startRot, 0, instanceData);
+                playerCar.GetComponent<CarApperance>().SetLocalPlayer();
             }
             if (PhotonNetwork.IsMasterClient)
             {
@@ -128,6 +135,8 @@ public class RaceController : MonoBehaviourPunCallbacks
         InvokeRepeating("CountDown", 3, 1);
         endPanel.SetActive(false);
         startText.gameObject.SetActive(false);
+        waitingText.gameObject.SetActive(false);
+        startRaceButton.gameObject.SetActive(false);
 
         GameObject[] cars = GameObject.FindGameObjectsWithTag("Car");
         carsController = new CheckPointController[cars.Length];
